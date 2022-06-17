@@ -23,7 +23,6 @@ class DockerRestart {
 
 module.exports = {
     mode: "development",
-    devtool: "inline-source-map",
     entry: {
         server: "./server/server.ts",
         app: "./src/index.js",
@@ -69,23 +68,17 @@ module.exports = {
             {
                 test: /\.(png|jp(e*)g|svg|gif)$/,
                 use: ['file-loader'],
-            },
+            }
         ],
     },
     resolve: {
         extensions: ["", ".ts", ".js"],
         fallback: {
-            "fs": false,
-            "tls": false,
-            "net": false,
-            "path": false,
-            "zlib": false,
-            "http": false,
-            "https": false,
-            "stream": false,
-            "crypto": false,
-            "crypto-browserify": false,
-            "util": false,
+            fs: false,
+            net: false,
+            crypto: false,
+            zlib: false,
+            "http": require.resolve("stream-http")
         },
     },
     output: {
