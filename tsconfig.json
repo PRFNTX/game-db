@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "./build/",
-    "noImplicitAny": false,
-    "module": "es6",
-    "target": "es5",
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmit": true,
     "jsx": "react"
-  }
+  },
+  "include": ["src"]
 }
