@@ -30,7 +30,7 @@ services:
     ports: 
       - 2021:2021
     volumes:
-      - ./build:/usr/game-db
+      - ./build/node:/usr/game-db
       - ./public:/public
     depends_on:
       - nginx

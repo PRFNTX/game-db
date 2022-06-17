@@ -21,7 +21,7 @@ class DockerRestart {
   }
 }
 
-module.exports = {
+const baseConfig = {
     mode: "development",
     entry: {
         server: "./server/server.ts",
@@ -90,3 +90,28 @@ module.exports = {
         new DockerRestart(),
     ]
 }
+
+const nodeConfig = {
+    ...baseConfig,
+    target: 'node18',
+    output: {
+        filename: "[name].build.js",
+        path: path.resolve(__dirname, "build/node"),
+    },
+    entry: {
+        server: "./server/server.ts",
+    },
+}
+
+const browserConfig = {
+    ...baseConfig,
+    output: {
+        filename: "[name].build.js",
+        path: path.resolve(__dirname, "build"),
+    },
+    entry: {
+        app: "./src/index.js",
+    },
+}
+
+module.exports = [nodeConfig, browserConfig]
