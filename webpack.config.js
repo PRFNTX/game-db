@@ -14,7 +14,7 @@ class DockerRestart {
     compiler.hooks.done.tapAsync(
       'restartDocker',
       (compilation, callback) => {
-        exec("docker compose restart")
+        exec("docker compose restart web")
         callback();
       }
     );
@@ -22,57 +22,13 @@ class DockerRestart {
 }
 
 const baseConfig = {
-    mode: "development",
+    mode: "production",
     entry: {
         server: "./server/server.ts",
         app: "./src/index.js",
     },
-    module: {
-        rules: [
-            {
-                test: /.*\/server.*\.[jt]s$/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                          "@babel/preset-env",
-                          "@babel/preset-typescript",
-                        ],
-                    },
-                },
-                exclude: /node_modules/
-            },
-            {
-                test: /.*\/src.*\.[jt]s$/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                          "@babel/preset-env",
-                          "@babel/preset-react",
-                          "@babel/preset-typescript",
-                        ],
-                    }
-                },
-                exclude: /node_modules/
-            },
-            {
-                test: /\.s?css$/,
-                exclude: /node_modules/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    'sass-loader',
-                ]
-            },
-            {
-                test: /\.(png|jp(e*)g|svg|gif)$/,
-                use: ['file-loader'],
-            }
-        ],
-    },
     resolve: {
-        extensions: ["", ".ts", ".js"],
+        extensions: ["", ".ts", ".js", ".scss", ".css"],
         fallback: {
             fs: false,
             net: false,
@@ -101,17 +57,65 @@ const nodeConfig = {
     entry: {
         server: "./server/server.ts",
     },
+    module: {
+        rules: [
+            {
+                test: /.*\/server.*\.[jt]s$/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                          "@babel/preset-env",
+                          "@babel/preset-typescript",
+                        ],
+                    },
+                },
+                exclude: /node_modules/
+            },
+        ]
+    }
 }
 
 const browserConfig = {
     ...baseConfig,
     output: {
         filename: "[name].build.js",
-        path: path.resolve(__dirname, "build"),
+        path: path.resolve(__dirname, "public"),
     },
     entry: {
         app: "./src/index.js",
     },
+    module: {
+        rules: [
+            {
+                test: /.*\/src.*\.[jt]s$/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                          "@babel/preset-env",
+                          "@babel/preset-react",
+                          "@babel/preset-typescript",
+                        ],
+                    }
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.s?css$/,
+                exclude: /node_modules/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader',
+                ]
+            },
+            {
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                use: ['file-loader'],
+            }
+        ]
+    }
 }
 
 module.exports = [nodeConfig, browserConfig]

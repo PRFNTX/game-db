@@ -28,10 +28,10 @@ services:
     container_name: express-server
     restart: always
     ports: 
-      - 2021:2021
+      - 8080:8080
     volumes:
-      - ./build/node:/usr/game-db
-      - ./public:/public
+      - ./build/node/server.build.js:/usr/game-db/server.build.js:ro
+      - ./public:/public:ro
     depends_on:
       - nginx
       - mongodb
@@ -41,14 +41,11 @@ services:
     restart: always
     container_name: nginx
     ports:
-      - 443:443
       - 80:80
+      - 443:443
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
 
 volumes:
   data: {}
 
-networks:
-  default:
-    name: mongodb_network
