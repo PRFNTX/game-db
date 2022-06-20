@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const Dotenv = require('dotenv-webpack');
 const fs = require("fs");
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
@@ -24,7 +25,6 @@ class DockerRestart {
 const baseConfig = {
     mode: "production",
     entry: {
-        server: "./server/server.ts",
         app: "./src/index.js",
     },
     resolve: {
@@ -37,14 +37,6 @@ const baseConfig = {
             "http": require.resolve("stream-http")
         },
     },
-    output: {
-        filename: "[name].build.js",
-        path: path.resolve(__dirname, "build"),
-    },
-    plugins: [
-        new MiniCssExtractPlugin(),
-        new DockerRestart(),
-    ]
 }
 
 const nodeConfig = {
@@ -73,7 +65,15 @@ const nodeConfig = {
                 exclude: /node_modules/
             },
         ]
-    }
+    },
+    output: {
+        filename: "[name].build.js",
+        path: path.resolve(__dirname, "build"),
+    },
+    plugins: [
+        new DockerRestart(),
+        new Dotenv(),
+    ]
 }
 
 const browserConfig = {
@@ -115,7 +115,10 @@ const browserConfig = {
                 use: ['file-loader'],
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin(),
+    ]
 }
 
 module.exports = [nodeConfig, browserConfig]
